@@ -14,14 +14,12 @@ public class UserTests {
 
     Faker faker;
     User userPayload;
-
-    public Logger logger;
+    private static final Logger LOGGER = LogManager.getLogger(UserTests.class.getName());
 
     @BeforeClass
     public void setup() {
         faker=new Faker();
         userPayload=new User();
-
         userPayload.setId(faker.idNumber().hashCode());
         userPayload.setUsername(faker.name().username());
         userPayload.setFirstName(faker.name().firstName());
@@ -29,9 +27,7 @@ public class UserTests {
         userPayload.setEmail(faker.internet().safeEmailAddress());
         userPayload.setPassword(faker.internet().password(5,10));
         userPayload.setPhone(faker.phoneNumber().cellPhone());
-
-        logger= LogManager.getLogger(this.getClass());
-
+        LOGGER.info(userPayload.toString());
     }
 
     @Test(priority=1)
@@ -39,7 +35,7 @@ public class UserTests {
         Response response=UserEndpoints.createUser(userPayload);
         response.then().log().all();
         Assert.assertEquals(response.getStatusCode(), 200);
-        logger.info(" ****** created user ****** ");
+        LOGGER.info(" ****** created user ****** ");
     }
 
     @Test(priority=2)
@@ -47,7 +43,7 @@ public class UserTests {
         Response response=UserEndpoints.readUser(this.userPayload.getUsername());
         response.then().log().all();
         Assert.assertEquals(response.getStatusCode(), 200);
-        logger.info(" ****** received user details ****** ");
+        LOGGER.info(" ****** received user details ****** ");
     }
 
     @Test(priority=3)
@@ -63,14 +59,14 @@ public class UserTests {
         Response responseAfterUpdate=UserEndpoints.readUser(this.userPayload.getUsername());
         responseAfterUpdate.then().log().body().statusCode(200);
         Assert.assertEquals(response.getStatusCode(), 200);
-        logger.info(" ****** updated user ****** ");
+        LOGGER.info(" ****** updated user ****** ");
     }
 
     @Test(priority = 4)
     public void testDeleteUserByName() {
         Response response=UserEndpoints.deleteUser(userPayload.getUsername());
         response.then().log().body().statusCode(200);
-        logger.info(" ****** deleted user ****** ");
+        LOGGER.info(" ****** deleted user ****** ");
     }
 
 }
