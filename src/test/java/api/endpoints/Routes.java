@@ -1,7 +1,6 @@
 package api.endpoints;
 
 public class Routes {
-
     public static String baseUrl="https://<baseurl>";
     public static String postUrl=baseUrl+"/user";
     public static String getUrl=baseUrl+"/user/{username}";
